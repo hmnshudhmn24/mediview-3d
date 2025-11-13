@@ -1,58 +1,79 @@
----
-language:
-  - en
-license: apache-2.0
-tags:
-  - image-to-3d
-  - medical-imaging
-  - reconstruction
-  - segmentation
-  - explainability
-pipeline_tag: image-to-3d
-library_name: python
----
+# 🧠 MEDIVIEW-3D  
+### *2D Medical Slices → 3D Reconstruction + Anomaly Localization + Text Explanations*
 
-# MEDIVIEW-3D (Advanced)
+**MEDIVIEW-3D** transforms stacks of **2D medical image slices** into an interactive **3D reconstruction**, highlights **anomalous regions**, and generates **human-readable explanations** describing the findings.
 
-**MEDIVIEW-3D** converts 2D medical image slices into a 3D reconstruction, localizes anomalous regions, and generates **textual explanations** describing the detected regions (size, approximate location, and suggested next steps).
+🚨 **Disclaimer:**  
+This project is a *research/demo tool only* — **not** a certified medical device.  
+Do **NOT** use it for clinical diagnoses or treatment decisions.
 
-**Important:** This is a research/demo tool and **not** a medical device. Do not use for clinical decisions.
+## ✨ Features
+- 🧱 **3D Reconstruction** from 2D slices  
+- 🔴 **Anomaly Detection & Highlighting** (colored mesh output)  
+- 📝 **Auto-Generated Explanations** (size, rough location, next-step suggestions)  
+- 🤖 **Two Inference Modes**  
+  - Threshold-based  
+  - Model-based (UNet)  
+- 🧪 Includes a **synthetic phantom dataset** (safe & non-patient)  
+- 🖥️ **Streamlit UI** for interactive demo  
 
-## Quickstart (demo)
+## 🚀 Quickstart (Demo)
 
-1. Install:
+### 1️⃣ Install dependencies  
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Generate synthetic phantom slices:
+### 2️⃣ Generate synthetic phantom slices  
 ```bash
 python examples/generate_synthetic_phantom.py
 ```
 
-3. Run inference with thresholding and get a mesh + explanation:
+### 3️⃣ Run inference (threshold method)  
+Outputs a **3D mesh** + **text explanation**.
 ```bash
-python infer_anomaly.py --source examples/synthetic_phantom --method threshold --out demo_mesh_threshold.ply --explain_out explanation.txt
+python infer_anomaly.py   --source examples/synthetic_phantom   --method threshold   --out demo_mesh_threshold.ply   --explain_out explanation.txt
 ```
 
-4. (Optional) Train small UNet and run model-based inference:
+### 4️⃣ (Optional) Train UNet + Run model-based inference  
 ```bash
-python train_unet.py --data examples/synthetic_phantom --epochs 3 --out models/unet_demo.pt
-python infer_anomaly.py --source examples/synthetic_phantom --method model --model_path models/unet_demo.pt --out demo_mesh_model.ply --explain_out explanation_model.txt
+python train_unet.py   --data examples/synthetic_phantom   --epochs 3   --out models/unet_demo.pt
 ```
 
-5. Run Streamlit demo:
+```bash
+python infer_anomaly.py   --source examples/synthetic_phantom   --method model   --model_path models/unet_demo.pt   --out demo_mesh_model.ply   --explain_out explanation_model.txt
+```
+
+### 5️⃣ Launch the Streamlit demo  
 ```bash
 streamlit run app.py
 ```
 
-## What you get
-- 3D mesh `.ply` with anomaly regions colored red
-- `explanation.txt` with human-friendly descriptions of detected regions
-- Example synthetic phantom (no patient data)
-- Small UNet implementation for demo training
+## 📦 Output Files
+| File | Description |
+|------|-------------|
+| `*.ply` | 3D reconstructed mesh with anomalous regions highlighted in **red** |
+| `explanation.txt` | Human-friendly description of detected anomalies |
+| Synthetic Phantom | Example dataset for fully offline experimentation |
 
-## Safety & Limitations
-- Demo-only; not clinically validated.
-- Do not upload identifiable patient data to public repos.
-- For real medical use, integrate robust preprocessing and obtain regulatory approvals.
+## 🧩 Project Structure
+```
+MEDIVIEW-3D/
+│── app.py                     
+│── infer_anomaly.py           
+│── train_unet.py              
+│── examples/
+│     └── synthetic_phantom/   
+│── models/                    
+│── utils/                     
+└── requirements.txt
+```
+
+## 🧠 How It Works (High-Level)
+1. **Load 2D slices** → preprocess  
+2. **3D reconstruction** via volume stacking  
+3. **Anomaly detection**  
+   - Thresholding OR  
+   - UNet segmentation  
+4. **Mesh generation** (PLY)  
+5. **Natural language explanation** summarizing findings  
