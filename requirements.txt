@@ -1,0 +1,13 @@
+numpy>=1.21
+scipy
+scikit-image
+matplotlib
+pillow
+imageio
+pydicom
+nibabel
+PyYAML
+trimesh
+torch>=1.10
+tqdm
+streamlit

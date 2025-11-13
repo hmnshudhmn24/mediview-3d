@@ -1,0 +1,13 @@
+# Demo commands
+
+# 1) Generate synthetic phantom slices
+python examples/generate_synthetic_phantom.py
+
+# 2) Reconstruct mesh + explanation (thresholding)
+python infer_anomaly.py --source examples/synthetic_phantom --method threshold --out demo_mesh_threshold.ply --explain_out explanation.txt
+
+# 3) Train small UNet (optional)
+python train_unet.py --data examples/synthetic_phantom --epochs 3 --out models/unet_demo.pt
+
+# 4) Run model-based inference (after training)
+python infer_anomaly.py --source examples/synthetic_phantom --method model --model_path models/unet_demo.pt --out demo_mesh_model.ply --explain_out explanation_model.txt
